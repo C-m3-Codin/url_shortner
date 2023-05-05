@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"math/rand"
@@ -64,12 +65,16 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
 func createShortLink(c *gin.Context) {
 	var shortLink ShortLink
 	err := c.BindJSON(&shortLink)
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	if shortLink.OriginalURL == "" {
+		c.AbortWithError(http.StatusBadRequest, errors.New("missing OriginalURL field"))
 		return
 	}
 
