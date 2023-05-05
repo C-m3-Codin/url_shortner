@@ -10,6 +10,8 @@ services:
       - "MYSQL_PASSWORD=${DB_PASSWORD}"
       - "MYSQL_DATABASE=${DB_NAME}"   
   web:
+    env_file:
+      - .env
     build: .
     ports:
       - "8000:8000"
