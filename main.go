@@ -96,7 +96,8 @@ func createShortLink(c *gin.Context) {
 
 	// Check if the number of active short URLs is less than 20000.
 	if count >= 20000 {
-		c.AbortWithError(http.StatusTooManyRequests, errors.New("maximum number of active short URLs reached"))
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Too many active URLs"})
+		// c.AbortWithError(http.StatusTooManyRequests, errors.New("maximum number of active short URLs reached"))
 		return
 	}
 
