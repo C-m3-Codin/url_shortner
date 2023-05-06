@@ -86,6 +86,20 @@ func createShortLink(c *gin.Context) {
 		return
 	}
 
+	// Count the number of active short URLs in the database.
+	var count int64
+	err = db.Model(&ShortLink{}).Where("expires_at >= ?", time.Now()).Count(&count).Error
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	// Check if the number of active short URLs is less than 20000.
+	if count >= 20000 {
+		c.AbortWithError(http.StatusTooManyRequests, errors.New("maximum number of active short URLs reached"))
+		return
+	}
+
 	// Generate a random shortened URL.
 	shortenedUrl := generateShortenedURL()
 
