@@ -17,7 +17,7 @@ var db *gorm.DB
 
 // Define a struct to represent a shortened URL.
 type ShortLink struct {
-	ID           int       `json:"id"`
+	gorm.Model
 	OriginalURL  string    `json:"original_url"`
 	ShortenedURL string    `json:"shortened_url"`
 	ExpiresAt    time.Time `json:"expires_at"`
@@ -103,7 +103,8 @@ func createShortLink(c *gin.Context) {
 
 	// Generate a random shortened URL.
 	shortenedUrl := generateShortenedURL()
-
+	fmt.Printf("\n\n" + "" + c.Request.Host + "/" + shortenedUrl + "\n\n")
+	shortenedUrl = c.Request.Host + "/" + shortenedUrl
 	// Set the expiry time to 24 hours from now.
 	expiresAt := time.Now().Add(24 * time.Hour)
 
@@ -123,11 +124,17 @@ func createShortLink(c *gin.Context) {
 	shortLink.ExpiresAt = expiresAt
 
 	// Return the new shortened URL as a JSON response.
-	c.JSON(http.StatusOK, shortLink)
+	c.JSON(http.StatusOK, gin.H{
+		"original_url":  shortLink.OriginalURL,
+		"shortened_url": shortenedUrl,
+		"expires_at":    expiresAt,
+	})
+	// c.JSON(http.StatusOK, shortLink)
 }
 
 func redirectShortLink(c *gin.Context) {
 	shortenedUrl := c.Param("shortenedUrl")
+	shortenedUrl = c.Request.Host + "/" + shortenedUrl
 
 	// Query the database for the original URL associated with the shortened URL
 	var shortLink ShortLink
