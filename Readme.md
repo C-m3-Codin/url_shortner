@@ -11,7 +11,7 @@ This is a simple URL shortener API built using Go and Gin framework. It uses GOR
 
 1. Clone the repository and navigate to the project directory.
 ```bash
-git clone https://github.com/username/repo.git
+git clone https://github.com/C-m3-Codin/url_shortner.git
 cd repo
 ```
 
