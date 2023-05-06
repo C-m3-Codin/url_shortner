@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"math/rand"
@@ -82,7 +81,8 @@ func createShortLink(c *gin.Context) {
 
 	// Check that the OriginalURL field is not empty.
 	if shortLink.OriginalURL == "" {
-		c.AbortWithError(http.StatusBadRequest, errors.New("missing OriginalURL field"))
+		c.JSON(http.StatusBadRequest, gin.H{"message": "missing OriginalURL field"})
+		// c.AbortWithError(http.StatusBadRequest, errors.New("missing OriginalURL field"))
 		return
 	}
 
