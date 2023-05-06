@@ -13,12 +13,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// const (
-// 	dbUser     = "root"
-// 	dbPassword = "password"
-// 	dbName     = "shortlinks"
-// )
-
 var db *gorm.DB
 
 type ShortLink struct {
@@ -30,13 +24,8 @@ type ShortLink struct {
 
 func main() {
 
-	// dbUser := os.Getenv("DB_USER")
-	// dbPassword := os.Getenv("DB_PASSWORD")
-	// dbHost := os.Getenv("DB_HOST")
-	// dbName := os.Getenv("DB_NAME")
 	var err error
-	// fmt.Sprintf("\n\n\\n", dbHost)
-	// dsn := fmt.Sprintf("%s:%s@tcp(%s:3305)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPassword, dbHost, dbName)
+
 	db, err = services.NewDatabase()
 	if err != nil {
 		log.Fatal(err)
@@ -49,11 +38,12 @@ func main() {
 
 	go func() {
 		for {
+			fmt.Print("Checking for expiry")
 			err := db.Where("expires_at < ?", time.Now()).Delete(&ShortLink{}).Error
 			if err != nil {
 				log.Println(err)
 			}
-			time.Sleep(time.Hour)
+			time.Sleep(time.Minute)
 		}
 	}()
 	r := gin.Default()
