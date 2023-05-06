@@ -1,4 +1,4 @@
-module url_shortner
+module github.com/c-m3-codin/url_shortner
 
 go 1.20
 

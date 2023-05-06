@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/c-m3-codin/url_shortner/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+var DB *gorm.DB
 
 // NewDatabase : intializes and returns mysql db
 func NewDatabase() (*gorm.DB, error) {
@@ -21,6 +24,9 @@ func NewDatabase() (*gorm.DB, error) {
 	fmt.Println(URL)
 	db, err := gorm.Open(mysql.Open(URL))
 
+	// Create the necessary tables in the database.
+	db.AutoMigrate(models.ShortLink{})
+	DB = db
 	if err != nil {
 		// panic("Failed to connect to database!")
 		return nil, err
