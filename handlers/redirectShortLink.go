@@ -7,12 +7,14 @@ import (
 
 	"github.com/c-m3-codin/url_shortner/models"
 	"github.com/c-m3-codin/url_shortner/services"
+	"github.com/c-m3-codin/url_shortner/utils"
 	"github.com/gin-gonic/gin"
 )
 
 func RedirectShortLink(c *gin.Context) {
+
 	shortenedUrl := c.Param("shortenedUrl")
-	shortenedUrl = c.Request.Host + "/" + shortenedUrl
+	// shortenedUrl = c.Request.Host + "/" + shortenedUrl
 
 	// Query the database for the original URL associated with the shortened URL
 	var shortLink models.ShortLink
@@ -31,5 +33,7 @@ func RedirectShortLink(c *gin.Context) {
 
 	// Redirect the user to the original URL
 	fmt.Printf("Redirecting to ", shortLink.OriginalURL)
+
+	go utils.LogHit(&shortLink, c.Request.RemoteAddr)
 	c.Redirect(http.StatusPermanentRedirect, shortLink.OriginalURL)
 }

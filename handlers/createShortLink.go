@@ -48,7 +48,7 @@ func CreateShortLink(c *gin.Context) {
 	// Generate a random shortened URL.
 	shortenedUrl := utils.GenerateShortenedURL()
 	fmt.Printf("\n\n" + "" + c.Request.Host + "/" + shortenedUrl + "\n\n")
-	shortenedUrl = c.Request.Host + "/" + shortenedUrl
+	// shortenedUrl = c.Request.Host + "/" + shortenedUrl
 	// Set the expiry time to 24 hours from now.
 	expiresAt := time.Now().Add(24 * time.Hour)
 
@@ -70,7 +70,7 @@ func CreateShortLink(c *gin.Context) {
 	// Return the new shortened URL as a JSON response.
 	c.JSON(http.StatusOK, gin.H{
 		"original_url":  shortLink.OriginalURL,
-		"shortened_url": shortenedUrl,
+		"shortened_url": c.Request.Host + "/" + shortenedUrl,
 		"expires_at":    expiresAt,
 	})
 	// c.JSON(http.StatusOK, shortLink)
