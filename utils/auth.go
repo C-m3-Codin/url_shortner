@@ -10,6 +10,7 @@ import (
 // get the secret key from the env
 var jwtKeys = []byte("secretKEy")
 
+// Generates JWT token for a given username and email expiry set to 1 hr
 func GenerateJWT(email string, username string) (token string, err error) {
 	expirationTime := time.Now().Add(time.Hour * 1)
 
@@ -30,6 +31,7 @@ func GenerateJWT(email string, username string) (token string, err error) {
 	return
 }
 
+// checks the validity of a signed token returns nil if valid
 func ValidateToken(signedToken string) (err error) {
 	token, err := jwt.Parse(signedToken, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtKeys), nil
