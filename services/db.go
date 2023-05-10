@@ -27,6 +27,7 @@ func NewDatabase() (*gorm.DB, error) {
 	// Create the necessary tables in the database.
 	db.AutoMigrate(models.ShortLink{})
 	db.AutoMigrate(models.RedirectRequests{})
+	db.AutoMigrate(models.User{})
 	DB = db
 	if err != nil {
 		// panic("Failed to connect to database!")
