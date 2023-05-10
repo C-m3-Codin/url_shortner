@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// handler to Redirect to the original link from the shortened link
 func RedirectShortLink(c *gin.Context) {
 
 	shortenedUrl := c.Param("shortenedUrl")
