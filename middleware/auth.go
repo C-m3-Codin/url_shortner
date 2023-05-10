@@ -8,20 +8,23 @@ import (
 )
 
 // middleware function to check authentication calls next function if valid auth else aborts
-func Auth(context *gin.Context) gin.HandlerFunc {
+func Auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		tokenStr := context.GetHeader("Authorization")
+		tokenStr := ctx.GetHeader("Authorization")
+
 		if tokenStr == "" {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "No Auth token in header"})
-			context.Abort()
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No Auth token in header"})
+			ctx.Abort()
 			return
 		}
 		err := utils.ValidateToken(tokenStr)
+		// fmt.Println(err.Error())
 		if err != nil {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Token"})
-			context.Abort()
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Token"})
+			ctx.Abort()
 			return
 		}
-		context.Next()
+
+		ctx.Next()
 	}
 }
