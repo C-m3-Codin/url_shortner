@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/c-m3-codin/url_shortner/handlers"
+	"github.com/c-m3-codin/url_shortner/middleware"
 	"github.com/c-m3-codin/url_shortner/models"
 	"github.com/c-m3-codin/url_shortner/services"
 
@@ -49,6 +50,17 @@ func main() {
 
 	// Define a route for redirecting to a shortened URL.
 	r.GET("/:shortenedUrl", handlers.RedirectShortLink)
+
+	// register a user with creds
+	r.POST("/user/register", handlers.RegisterUser)
+
+	// get token by logging in
+	r.POST("/token", handlers.GenerateToken)
+
+	secured := r.Group("/sec").Use(middleware.Auth())
+	{
+		secured.GET("/ping", handlers.CheckAuth)
+	}
 
 	// Start the server on port 8000.
 	err = r.Run(":8000")
