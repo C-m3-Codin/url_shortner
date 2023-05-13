@@ -59,7 +59,7 @@ func main() {
 		secured.GET("/ping", handlers.CheckAuth)
 
 		// Define a route for creating shortened URLs.
-		r.POST("/create", handlers.CreateShortLink)
+		secured.POST("/create", handlers.CreateShortLink)
 
 	}
 
