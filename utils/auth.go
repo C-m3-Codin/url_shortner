@@ -50,7 +50,7 @@ func GenerateJWT(email string, username string) (string, error) {
 }
 
 // ValidateToken validates the given JWT token and returns an error if the token is invalid.
-func ValidateToken(tokenString string) error {
+func ValidateToken(tokenString string) (error, *Claims) {
 	// Parse the token using the HS256 algorithm and the secret key.
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -63,14 +63,14 @@ func ValidateToken(tokenString string) error {
 	// Check if there was an error parsing the token.
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
-			return errors.New("invalid token signature")
+			return errors.New("invalid token signature"), nil
 		}
-		return err
+		return err, nil
 	}
 
 	// Check if the token is valid.
 	if !token.Valid {
-		return errors.New("invalid token")
+		return errors.New("invalid token"), nil
 	}
 
 	claims := token.Claims.(*Claims)
@@ -81,8 +81,8 @@ func ValidateToken(tokenString string) error {
 	err = token.Claims.Valid()
 	if err != nil {
 		fmt.Printf("Token not valid")
-		return err
+		return err, nil
 	}
 
-	return nil
+	return nil, claims
 }
