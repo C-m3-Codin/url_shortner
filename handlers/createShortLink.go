@@ -13,6 +13,7 @@ import (
 
 // Handler function for creating a shortened URL.
 func CreateShortLink(c *gin.Context) {
+
 	// Declare a variable to hold the incoming request body.
 	var shortLink models.ShortLink
 
@@ -54,9 +55,10 @@ func CreateShortLink(c *gin.Context) {
 
 	// Insert the new shortened URL into the database.
 	err = services.DB.Create(&models.ShortLink{
-		OriginalURL:  shortLink.OriginalURL,
-		ShortenedURL: shortenedUrl,
-		ExpiresAt:    expiresAt,
+		OriginalURL:   shortLink.OriginalURL,
+		ShortenedURL:  shortenedUrl,
+		ExpiresAt:     expiresAt,
+		OwnerUsername: c.GetString("username"),
 	}).Error
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)

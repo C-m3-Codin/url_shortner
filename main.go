@@ -45,9 +45,6 @@ func main() {
 	// Create a new Gin router.
 	r := gin.Default()
 
-	// Define a route for creating shortened URLs.
-	r.POST("/create", handlers.CreateShortLink)
-
 	// Define a route for redirecting to a shortened URL.
 	r.GET("/:shortenedUrl", handlers.RedirectShortLink)
 
@@ -60,6 +57,10 @@ func main() {
 	secured := r.Group("/sec").Use(middleware.Auth())
 	{
 		secured.GET("/ping", handlers.CheckAuth)
+
+		// Define a route for creating shortened URLs.
+		secured.POST("/create", handlers.CreateShortLink)
+
 	}
 
 	// Start the server on port 8000.
