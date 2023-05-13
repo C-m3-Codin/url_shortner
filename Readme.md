@@ -5,34 +5,53 @@ This is a simple URL shortener API built using Go and Gin framework. It uses GOR
 ## Running the API using Docker
 
 ### Prerequisites
+
 - Docker
 
 ### Steps
 
 1. Clone the repository and navigate to the project directory.
-```bash
-git clone https://github.com/C-m3-Codin/url_shortner.git
-cd url_shortner
-```
+
+    ```bash
+    git clone https://github.com/C-m3-Codin/url_shortner.git
+    cd url_shortner
+    ```
 
 2. Build the Docker image using the provided Dockerfile.
-```bash
-docker build -t url-shortener .
-```
+
+    ```bash
+    docker build -t url-shortener .
+    ```
 
 3. Run the Docker container using the provided docker-compose.yml file.
-```bash
-docker-compose up -d
-```
+
+    ```bash
+    docker-compose up -d
+    ```
 
 ## Usage
 
-The API provides two endpoints:
+The API provides three endpoints:
 
-1. `POST /create` - Creates a new shortened URL.
-2. `GET /:shortenedUrl` - Redirects to the original URL associated with the given shortened URL.
+- `POST /user/register` - Registers a new user.
+- `POST /token` - Generates an auth token.
+- `POST /create` - Creates a new shortened URL.
+- `GET /:shortenedUrl` - Redirects to the original URL associated with the given shortened URL.
 
-### POST /create
+### POST /user/register
+
+To register a new user, send a JSON POST request to the `/user/register` endpoint with the following format:
+
+```json
+{
+  "name":"Cyril",
+  "username":"c1337_2",
+  "email":"c@c_2.com",
+  "password":"password@123"
+}
+```
+
+### POST /sec/create
 
 To create a new shortened URL, send a JSON POST request to the `/create` endpoint with the following format:
 ```json
