@@ -17,13 +17,16 @@ func Auth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		err := utils.ValidateToken(tokenStr)
+		err, claims := utils.ValidateToken(tokenStr)
 		// fmt.Println(err.Error())
 		if err != nil {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Token"})
 			ctx.Abort()
 			return
 		}
+
+		ctx.Set("email", claims.Email)
+		ctx.Set("username", claims.Username)
 
 		ctx.Next()
 	}

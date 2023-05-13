@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CheckAuth(context *gin.Context) {
-	context.JSON(http.StatusOK, gin.H{"message": "Pong"})
+func CheckAuth(c *gin.Context) {
+	username := c.GetString("username")
+	response := "pong " + username
+	c.JSON(http.StatusOK, gin.H{"message": response})
 }
