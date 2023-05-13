@@ -14,18 +14,22 @@ var jwtKey = []byte("my_secret_key")
 type Claims struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
+	exp      time.Time
 	jwt.StandardClaims
 }
 
 // GenerateToken generates a new JWT token for the given username and email.
 func GenerateJWT(email string, username string) (string, error) {
 	// Set the expiration time of the token to 1 hour from now.
-	expirationTime := time.Now().Add(time.Hour)
+	expirationTime := time.Now().Add(time.Hour * 1)
+
+	fmt.Println("Time now ", time.Now(), "\n Time of expiry ", expirationTime)
 
 	// Create the JWT claims, which includes the username, email, and expiration time.
 	claims := &Claims{
 		Username: username,
 		Email:    email,
+		exp:      expirationTime,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 			IssuedAt:  time.Now().Unix(),
@@ -50,7 +54,7 @@ func ValidateToken(tokenString string) error {
 	// Parse the token using the HS256 algorithm and the secret key.
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			fmt.Println("\n\n error in sign method \n\n")
+
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return jwtKey, nil
@@ -58,9 +62,7 @@ func ValidateToken(tokenString string) error {
 
 	// Check if there was an error parsing the token.
 	if err != nil {
-		fmt.Println("\n\n error parsing \n\n")
 		if err == jwt.ErrSignatureInvalid {
-			fmt.Println("\n\n invalid token signature  \n\n")
 			return errors.New("invalid token signature")
 		}
 		return err
@@ -68,11 +70,19 @@ func ValidateToken(tokenString string) error {
 
 	// Check if the token is valid.
 	if !token.Valid {
-		fmt.Println("\n\n token not valid \n\n")
 		return errors.New("invalid token")
 	}
 
-	fmt.Println("\n\n all well \n\n")
+	claims := token.Claims.(*Claims)
+	fmt.Println("claims is \n", claims.Username, claims.StandardClaims.IssuedAt)
+
+	fmt.Println("Time now ", time.Now(), "\n token is  ", token.Header)
+
+	err = token.Claims.Valid()
+	if err != nil {
+		fmt.Printf("Token not valid")
+		return err
+	}
 
 	return nil
 }
