@@ -19,7 +19,7 @@ func RedirectShortLink(c *gin.Context) {
 
 	// Query the database for the original URL associated with the shortened URL
 	var shortLink models.ShortLink
-	err := services.DB.Where("shortened_url = ?", shortenedUrl).First(&shortLink).Error
+	err := services.DB.Where("shortened_url = ?", shortenedUrl).FirstOrCreate(&shortLink).Error
 	if err != nil {
 		// Return a 404 error if the shortened URL is not found in the database
 		c.AbortWithError(http.StatusNotFound, err)
