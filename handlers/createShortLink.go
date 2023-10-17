@@ -13,13 +13,16 @@ import (
 
 // Handler function for creating a shortened URL.
 func CreateShortLink(c *gin.Context) {
+	fmt.Println("got here 1 ")
 
 	// Declare a variable to hold the incoming request body.
 	var shortLink models.ShortLink
 
 	// Bind the request body to the shortLink variable.
 	err := c.BindJSON(&shortLink)
+	fmt.Println("got here 2 ")
 	if err != nil {
+		fmt.Println("got here 3 ")
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -35,6 +38,7 @@ func CreateShortLink(c *gin.Context) {
 	var count int64
 	err = services.DB.Model(&models.ShortLink{}).Where("expires_at >= ?", time.Now()).Count(&count).Error
 	if err != nil {
+		fmt.Println("got here 4 ")
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
@@ -54,12 +58,16 @@ func CreateShortLink(c *gin.Context) {
 	expiresAt := time.Now().Add(24 * time.Hour)
 
 	// Insert the new shortened URL into the database.
-	err = services.DB.Create(&models.ShortLink{
-		OriginalURL:   shortLink.OriginalURL,
-		ShortenedURL:  shortenedUrl,
-		ExpiresAt:     expiresAt,
-		OwnerUsername: c.GetString("username"),
-	}).Error
+	shortLink.ShortenedURL = shortenedUrl
+	shortLink.ExpiresAt = expiresAt
+	shortLink.OwnerUsername = c.GetString("username")
+	err = services.DB.Create(&shortLink).Error
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+	// setting the same in redis
+	_, err = utils.SetRedisValue(shortenedUrl, shortLink)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
