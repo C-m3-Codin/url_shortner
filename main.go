@@ -62,6 +62,8 @@ func main() {
 		// Define a route for creating shortened URLs.
 		secured.POST("/create", handlers.CreateShortLink)
 
+		secured.GET("/logout", handlers.Logout)
+
 	}
 
 	// Start the server on port 8000.
