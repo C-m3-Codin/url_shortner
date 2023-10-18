@@ -67,7 +67,7 @@ func main() {
 	}
 
 	// Start the server on port 8000.
-	err = r.Run(":9000")
+	err = r.Run(":8000")
 	if err != nil {
 		log.Fatal(err)
 	}
