@@ -62,6 +62,9 @@ func main() {
 		// Define a route for creating shortened URLs.
 		secured.POST("/create", handlers.CreateShortLink)
 
+		secured.GET("/hits", handlers.GetHits)
+
+		// route to logout and invalidate the jwt
 		secured.GET("/logout", handlers.Logout)
 
 	}
