@@ -13,4 +13,11 @@ type ShortLink struct {
 	ShortenedURL  string    `json:"shortened_url"`
 	ExpiresAt     time.Time `json:"expires_at"`
 	OwnerUsername string
+	UserID        uint
+}
+
+type ShortLink_response struct {
+	OriginalURL  string    `json:"original_url"`
+	ShortenedURL string    `json:"shortened_url"`
+	ExpiresAt    time.Time `json:"expires_at"`
 }
