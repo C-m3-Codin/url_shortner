@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -10,32 +9,37 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ShortLinks []models.ShortLink
+
 func GetUrls(c *gin.Context) {
 
 	userId := c.GetUint("userID")
 
-	var shortLinks []models.ShortLink
+	var shortLinks ShortLinks
 
 	services.DB.Where("user_id = ?", userId).Find(&shortLinks)
 
-	var shortLink_response []models.ShortLink_response
-	for _, link := range shortLinks {
-		shortLink_response = append(shortLink_response, models.ShortLink_response{
-			OriginalURL:  link.OriginalURL,
-			ShortenedURL: link.ShortenedURL,
-			ExpiresAt:    link.ExpiresAt,
-		})
-	}
+	shortLink_response := shortLinks.generateResponsense()
 
 	fmt.Println(shortLink_response)
 
-	jsonResponse, err := json.Marshal(shortLink_response)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to marshal response"})
-		return
-	}
 	c.Header("Content-Type", "application/json")
-	c.String(http.StatusOK, string(jsonResponse))
+	c.JSON(http.StatusOK, shortLink_response)
 	// db.Where("name <> ?", "jinzhu").Find(&users)
+
+}
+
+func (shortLinks ShortLinks) generateResponsense() (shortLink_response []models.ShortLink_response) {
+
+	// []models.ShortLink_response
+	for _, link := range shortLinks {
+		shortLink_response = append(shortLink_response, models.ShortLink_response{
+			OriginalURL:  link.OriginalURL,
+			ExpiresAt:    link.ExpiresAt,
+			ShortenedURL: link.ShortenedURL,
+		})
+	}
+
+	return
 
 }
