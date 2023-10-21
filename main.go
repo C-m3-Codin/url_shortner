@@ -62,7 +62,7 @@ func main() {
 		// Define a route for creating shortened URLs.
 		secured.POST("/create", handlers.CreateShortLink)
 
-		secured.GET("/allRoutes", handlers.GetHits)
+		secured.GET("/allUrls", handlers.GetUrls)
 
 		secured.GET("/hits", handlers.GetHits)
 
