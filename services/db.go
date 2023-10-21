@@ -7,6 +7,7 @@ import (
 	"github.com/c-m3-codin/url_shortner/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
@@ -33,7 +34,9 @@ func NewDatabase() (*gorm.DB, error) {
 	URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS,
 		HOST, DBNAME)
 	fmt.Println(URL)
-	db, err := gorm.Open(mysql.Open(URL))
+	db, err := gorm.Open(mysql.Open(URL), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info), // Set the logger to print info-level logs.
+	})
 
 	// Create the necessary tables in the database.
 	db.AutoMigrate(models.ShortLink{})
