@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/c-m3-codin/url_shortner/models"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
@@ -14,12 +15,13 @@ var jwtKey = []byte("my_secret_key")
 type Claims struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
+	UserId   uint   `json:""`
 	exp      time.Time
 	jwt.StandardClaims
 }
 
 // GenerateToken generates a new JWT token for the given username and email.
-func GenerateJWT(email string, username string) (string, error) {
+func GenerateJWT(user models.User) (string, error) {
 	// Set the expiration time of the token to 1 hour from now.
 	expirationTime := time.Now().Add(time.Hour * 1)
 
@@ -27,8 +29,9 @@ func GenerateJWT(email string, username string) (string, error) {
 
 	// Create the JWT claims, which includes the username, email, and expiration time.
 	claims := &Claims{
-		Username: username,
-		Email:    email,
+		UserId:   user.ID,
+		Username: user.Username,
+		Email:    user.Email,
 		exp:      expirationTime,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),

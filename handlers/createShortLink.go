@@ -61,6 +61,7 @@ func CreateShortLink(c *gin.Context) {
 	shortLink.ShortenedURL = shortenedUrl
 	shortLink.ExpiresAt = expiresAt
 	shortLink.OwnerUsername = c.GetString("username")
+	shortLink.UserID = c.GetUint("userID")
 	err = services.DB.Create(&shortLink).Error
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
