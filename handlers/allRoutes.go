@@ -11,6 +11,7 @@ import (
 
 type ShortLinks []models.ShortLink
 
+// get all shortenned urls for a given user
 func GetUrls(c *gin.Context) {
 
 	userId := c.GetUint("userID")
