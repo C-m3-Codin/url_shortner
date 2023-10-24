@@ -64,6 +64,9 @@ func main() {
 
 		secured.GET("/allUrls", handlers.GetUrls)
 
+		// admin route to get all urls
+		secured.GET("/allUrls/:userID", handlers.GetUrls)
+
 		secured.GET("/hits", handlers.GetHits)
 
 		// route to logout and invalidate the jwt

@@ -22,6 +22,12 @@ func RegisterUser(context *gin.Context) {
 		context.Abort()
 		return
 	}
+
+	// make admin account with cpadmin
+	if user.Username == "cpadmin" {
+		user.IsAdmin = true
+	}
+
 	newUser := services.DB.Create(&user)
 	if newUser.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": newUser.Error.Error()})

@@ -17,6 +17,7 @@ type Claims struct {
 	Email    string `json:"email"`
 	UserId   uint   `json:""`
 	exp      time.Time
+	IsAdmin  bool
 	jwt.StandardClaims
 }
 
@@ -33,6 +34,7 @@ func GenerateJWT(user models.User) (string, error) {
 		Username: user.Username,
 		Email:    user.Email,
 		exp:      expirationTime,
+		IsAdmin:  user.IsAdmin,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 			IssuedAt:  time.Now().Unix(),
