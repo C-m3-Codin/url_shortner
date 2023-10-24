@@ -11,6 +11,7 @@ type User struct {
 	Username   string `json:"username" gorm:"unique"`
 	Email      string `json:"email" gorm:"unique"`
 	Password   string `json:"password"`
+	IsAdmin    bool   `json:"isAdmin" gorm:"defult:false"`
 	ShortLinks []ShortLink
 }
 
