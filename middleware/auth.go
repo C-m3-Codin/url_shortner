@@ -1,8 +1,12 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/c-m3-codin/url_shortner/models"
+	"github.com/c-m3-codin/url_shortner/services"
 	"github.com/c-m3-codin/url_shortner/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
@@ -12,6 +16,10 @@ import (
 func Auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tokenStr := ctx.GetHeader("Authorization")
+
+		userID := ctx.DefaultQuery("user_id", "")
+
+		fmt.Println("user is ", userID)
 
 		if tokenStr == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No Auth token in header"})
@@ -38,6 +46,53 @@ func Auth() gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Token"})
 			ctx.Abort()
 			return
+		}
+
+		if claims.IsAdmin {
+			fmt.Println("Admin Useer Logged In   ")
+
+			if userID != "" {
+
+				fmt.Println("Admin Useer Logged In as userID : ", userID)
+
+				num, err := strconv.Atoi(userID)
+				if err != nil {
+					fmt.Println("Conversion error:", err)
+					ctx.Header("Content-Type", "application/json")
+					ctx.JSON(http.StatusNonAuthoritativeInfo, "Erron: User Id incorrect ")
+					ctx.Abort()
+					return
+
+				} else {
+					userId_uint := uint(num)
+					fmt.Printf("Converted value as uint: %d\n", userId_uint)
+					services.DB.Where("ID=?", userId_uint)
+
+					var user models.User
+					services.DB.Where("ID=?", userId_uint).First(&user)
+
+					if user.Username == "" {
+
+						fmt.Println("No user found with the user id mentioned : ", userId_uint)
+						fmt.Println("Conversion error:", err)
+						ctx.Header("Content-Type", "application/json")
+						ctx.JSON(http.StatusNonAuthoritativeInfo, "Erron: User Id incorrect ")
+						ctx.Abort()
+						return
+					}
+
+					fmt.Println("Found user deets : ", user)
+
+					ctx.Set("email", user.Email)
+					ctx.Set("username", user.Username)
+					ctx.Set("userID", user.ID)
+					ctx.Set("isAdmin", user.IsAdmin)
+					ctx.Next()
+
+				}
+
+			}
+
 		}
 
 		ctx.Set("email", claims.Email)
