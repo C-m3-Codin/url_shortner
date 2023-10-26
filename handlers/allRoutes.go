@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/c-m3-codin/url_shortner/models"
 	"github.com/c-m3-codin/url_shortner/services"
@@ -18,20 +17,6 @@ func GetUrls(c *gin.Context) {
 	userId := c.GetUint("userID")
 
 	// login with admin user to retrive any account urls
-	isAdmin := c.GetBool("isAdmin")
-	if isAdmin {
-		user := c.Param("userID")
-		num, err := strconv.Atoi(user)
-		if err != nil {
-			fmt.Println("Conversion error:", err)
-			c.Header("Content-Type", "application/json")
-			c.JSON(http.StatusNonAuthoritativeInfo, "Erron: User Id incorrect ")
-		} else {
-			userId = uint(num)
-			fmt.Printf("Converted value as uint: %d\n", userId)
-		}
-
-	}
 
 	var shortLinks ShortLinks
 
