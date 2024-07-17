@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/c-m3-codin/url_shortner/models"
@@ -14,7 +13,7 @@ func GetHits(c *gin.Context) {
 	userID := c.GetUint("userID") // Replace with the actual user's ID.
 
 	shortUrl_received := c.Param("shortenedUrl")
-	fmt.Println("Hit all hits with userID: ", userID, " and shortURL: ", shortUrl_received)
+	//fmt.Println"Hit all hits with userID: ", userID, " and shortURL: ", shortUrl_received)
 
 	if shortUrl_received == "" {
 		c.Header("Content-Type", "application/json")
@@ -35,7 +34,7 @@ func GetHits(c *gin.Context) {
 	type RedirectRequests_list []models.RedirectRequests
 	var allHits RedirectRequests_list
 	services.DB.Where("shortened_url = ?", shortUrl_received).Find(&allHits)
-	fmt.Println(allHits)
+	//fmt.PrintlnallHits)
 
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, allHits)

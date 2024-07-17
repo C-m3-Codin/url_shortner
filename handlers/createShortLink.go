@@ -13,16 +13,16 @@ import (
 
 // Handler function for creating a shortened URL.
 func CreateShortLink(c *gin.Context) {
-	fmt.Println("got here 1 ")
+	// //fmt.Println"got here 1 ")
 
 	// Declare a variable to hold the incoming request body.
 	var shortLink models.ShortLink
 
 	// Bind the request body to the shortLink variable.
 	err := c.BindJSON(&shortLink)
-	fmt.Println("got here 2 ")
+	// //fmt.Println"got here 2 ")
 	if err != nil {
-		fmt.Println("got here 3 ")
+		// //fmt.Println"got here 3 ")
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -38,13 +38,13 @@ func CreateShortLink(c *gin.Context) {
 	var count int64
 	err = services.DB.Model(&models.ShortLink{}).Where("expires_at >= ?", time.Now()).Count(&count).Error
 	if err != nil {
-		fmt.Println("got here 4 ")
+		// //fmt.Println"got here 4 ")
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	// Check if the number of active short URLs is less than 20000.
-	if count >= 20000 {
+	if count >= 2000000 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Too many active URLs"})
 		// c.AbortWithError(http.StatusTooManyRequests, errors.New("maximum number of active short URLs reached"))
 		return

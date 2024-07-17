@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/arl/statsviz"
 	"github.com/c-m3-codin/url_shortner/handlers"
 	"github.com/c-m3-codin/url_shortner/middleware"
 	"github.com/c-m3-codin/url_shortner/models"
@@ -73,6 +74,21 @@ func main() {
 		secured.GET("/logout", handlers.Logout)
 
 	}
+
+	srv, _ := statsviz.NewServer()
+
+	ws := srv.Ws()
+	index := srv.Index()
+
+	// Register Statsviz server on the gin router.
+	// router := gin.New()
+	r.GET("/debug/statsviz/*filepath", func(context *gin.Context) {
+		if context.Param("filepath") == "/ws" {
+			ws(context.Writer, context.Request)
+			return
+		}
+		index(context.Writer, context.Request)
+	})
 
 	// Start the server on port 8000.
 	err = r.Run(":8000")

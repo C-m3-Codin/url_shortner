@@ -19,7 +19,7 @@ func Auth() gin.HandlerFunc {
 
 		userID := ctx.DefaultQuery("user_id", "")
 
-		fmt.Println("user is ", userID)
+		//fmt.Println"user is ", userID)
 
 		if tokenStr == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No Auth token in header"})
@@ -41,7 +41,7 @@ func Auth() gin.HandlerFunc {
 		}
 
 		err, claims := utils.ValidateToken(tokenStr)
-		// fmt.Println(err.Error())
+		// //fmt.Printlnerr.Error())
 		if err != nil {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Token"})
 			ctx.Abort()
@@ -49,15 +49,15 @@ func Auth() gin.HandlerFunc {
 		}
 
 		if claims.IsAdmin {
-			fmt.Println("Admin Useer Logged In   ")
+			//fmt.Println"Admin Useer Logged In   ")
 
 			if userID != "" {
 
-				fmt.Println("Admin Useer Logged In as userID : ", userID)
+				//fmt.Println"Admin Useer Logged In as userID : ", userID)
 
 				num, err := strconv.Atoi(userID)
 				if err != nil {
-					fmt.Println("Conversion error:", err)
+					//fmt.Println"Conversion error:", err)
 					ctx.Header("Content-Type", "application/json")
 					ctx.JSON(http.StatusNonAuthoritativeInfo, "Erron: User Id incorrect ")
 					ctx.Abort()
@@ -73,15 +73,15 @@ func Auth() gin.HandlerFunc {
 
 					if user.Username == "" {
 
-						fmt.Println("No user found with the user id mentioned : ", userId_uint)
-						fmt.Println("Conversion error:", err)
+						//fmt.Println"No user found with the user id mentioned : ", userId_uint)
+						//fmt.Println"Conversion error:", err)
 						ctx.Header("Content-Type", "application/json")
 						ctx.JSON(http.StatusNonAuthoritativeInfo, "Erron: User Id incorrect ")
 						ctx.Abort()
 						return
 					}
 
-					fmt.Println("Found user deets : ", user)
+					//fmt.Println"Found user deets : ", user)
 
 					ctx.Set("email", user.Email)
 					ctx.Set("username", user.Username)
