@@ -14,13 +14,14 @@ services:
     ports:
       - "6379:6379"
   web:
+    container_name: web_api
     env_file:
       - .env
     build: .
     ports:
       - "8000:8000"
-    volumes:
-      - ".:/app"
+    # volumes:
+    #   - ".:/app"
     depends_on:
       - db
       - redis
