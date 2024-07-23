@@ -1,0 +1,35 @@
+syntax="proto3";
+
+service AuthMicro {
+    // Sends a greeting
+    rpc Login (UserCreds) returns (Token,Error) {}
+    rpc VerfyToken(Token) returns (User,Error){}
+    rpc Logout(Token)returns(Success,Error){}
+  }
+
+  me
+
+  message Token{
+    string tokenString = 1;
+  }
+  message UserCreds{
+    string email = 1;
+    string password=2;
+  }
+
+  message Success {
+    bool logoutSuccess =1;
+  }
+
+message User{
+    string Name =1;      
+	string Email =2;   
+    string Username=3 ;
+	string Password =4; 
+    string IsAdmin  = 5
+}
+
+  
+
+
+
