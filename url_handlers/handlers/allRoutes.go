@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/c-m3-codin/url_shortner/models"
@@ -24,7 +23,7 @@ func GetUrls(c *gin.Context) {
 
 	shortLink_response := shortLinks.generateResponsense()
 
-	fmt.Println(shortLink_response)
+	//fmt.PrintlnshortLink_response)
 
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, shortLink_response)

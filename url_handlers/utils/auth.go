@@ -26,7 +26,7 @@ func GenerateJWT(user models.User) (string, error) {
 	// Set the expiration time of the token to 1 hour from now.
 	expirationTime := time.Now().Add(time.Hour * 1)
 
-	fmt.Println("Time now ", time.Now(), "\n Time of expiry ", expirationTime)
+	//fmt.Println"Time now ", time.Now(), "\n Time of expiry ", expirationTime)
 
 	// Create the JWT claims, which includes the username, email, and expiration time.
 	claims := &Claims{
@@ -79,9 +79,9 @@ func ValidateToken(tokenString string) (error, *Claims) {
 	}
 
 	claims := token.Claims.(*Claims)
-	fmt.Println("claims is \n", claims.Username, claims.StandardClaims.IssuedAt)
+	//fmt.Println"claims is \n", claims.Username, claims.StandardClaims.IssuedAt)
 
-	fmt.Println("Time now ", time.Now(), "\n token is  ", token.Header)
+	//fmt.Println"Time now ", time.Now(), "\n token is  ", token.Header)
 
 	err = token.Claims.Valid()
 	if err != nil {

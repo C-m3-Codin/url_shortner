@@ -22,7 +22,7 @@ func NewDatabase() (*gorm.DB, error) {
 	ENV := os.Getenv("ENVIRONMENT")
 
 	if ENV == "" {
-		fmt.Println("No Env")
+		//fmt.Println"No Env")
 		USER = "user"
 		PASS = "Password@123"
 		HOST = "localhost"
@@ -30,10 +30,10 @@ func NewDatabase() (*gorm.DB, error) {
 		DBNAME = "golang_url_shortner"
 	}
 
-	// fmt.Println(env)
+	// //fmt.Printlnenv)
 	URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS,
 		HOST, DBNAME)
-	fmt.Println(URL)
+	//fmt.PrintlnURL)
 	db, err := gorm.Open(mysql.Open(URL), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info), // Set the logger to print info-level logs.
 	})
@@ -48,7 +48,7 @@ func NewDatabase() (*gorm.DB, error) {
 		return nil, err
 
 	}
-	fmt.Println("Database connection established")
+	//fmt.Println"Database connection established")
 	return db, nil
 
 }
